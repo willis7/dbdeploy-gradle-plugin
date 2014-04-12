@@ -1,0 +1,27 @@
+allprojects  {
+    apply plugin: 'maven'
+
+    group = 'com.dbdeploy'
+    version = '3.0-SNAPSHOT'
+}
+
+subprojects {
+    apply plugin: 'java'
+    sourceCompatibility = 1.5
+    targetCompatibility = 1.5
+
+  
+    repositories {
+        mavenLocal()
+
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        maven { url "http://repo.maven.apache.org/maven2" }
+    }
+
+    dependencies {
+        compile group: 'org.freemarker', name: 'freemarker', version:'2.3.15'
+        testCompile group: 'junit', name: 'junit', version:'4.4'
+        testCompile group: 'org.hamcrest', name: 'hamcrest-all', version:'1.1'
+        testCompile group: 'org.mockito', name: 'mockito-all', version:'1.7'
+    }
+}

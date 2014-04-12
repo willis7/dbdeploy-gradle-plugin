@@ -1,0 +1,15 @@
+rootProject.name = 'dbdeploy-parent'
+include ':dbdeploy-core'
+include ':dbdeploy-ant'
+include ':dbdeploy-cli'
+include ':maven-dbdeploy-plugin'
+include ':gradle-dbdeploy-plugin'
+include ':dbdeploy-dist'
+
+project(':dbdeploy-core').projectDir = "$rootDir/dbdeploy-core" as File
+project(':dbdeploy-ant').projectDir = "$rootDir/dbdeploy-ant" as File
+project(':dbdeploy-cli').projectDir = "$rootDir/dbdeploy-cli" as File
+project(':maven-dbdeploy-plugin').projectDir = "$rootDir/maven-dbdeploy-plugin" as File
+project(':gradle-dbdeploy-plugin').projectDir = "$rootDir/gradle-dbdeploy-plugin" as File
+project(':dbdeploy-dist').projectDir = "$rootDir/dbdeploy-dist" as File
+

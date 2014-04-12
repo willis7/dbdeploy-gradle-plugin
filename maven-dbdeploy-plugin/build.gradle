@@ -1,0 +1,7 @@
+
+description = 'maven-dbdeploy-plugin'
+dependencies {
+    compile group: 'org.apache.maven', name: 'maven-plugin-api', version:'2.0'
+  compile project(':dbdeploy-core')
+    testCompile group: 'org.apache.maven.shared', name: 'maven-plugin-testing-harness', version:'1.1'
+}

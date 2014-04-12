@@ -1,0 +1,6 @@
+
+description = 'dbdeploy-cli'
+dependencies {
+  compile project(':dbdeploy-core')
+    compile group: 'commons-cli', name: 'commons-cli', version:'1.2'
+}
