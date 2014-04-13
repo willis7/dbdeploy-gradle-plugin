@@ -3,7 +3,7 @@ apply plugin: 'groovy'
 sourceCompatibility = 1.5
 version = '1.0'
 
-dependencies {
+dependencies{
     compile gradleApi(), 'com.dbdeploy:dbdeploy-core:3.0M3'
     compile localGroovy()
 

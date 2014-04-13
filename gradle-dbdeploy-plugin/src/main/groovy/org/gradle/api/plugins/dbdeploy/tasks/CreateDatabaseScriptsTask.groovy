@@ -1,67 +1,40 @@
 package org.gradle.api.plugins.dbdeploy.tasks
 
 import com.dbdeploy.DbDeploy
-import org.gradle.api.GradleException
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.OutputFile
 
 /**
  * Gradle task for creating the apply and undo scripts.
+ * @author Sion Williams
  */
-class CreateDatabaseScriptsTask extends AbstractDbDeployTask {
-    /**
-     * The name of the script that dbdeploy will output. Include a full
-     * or relative path.
-     *
-     * @parameter
-     * @required
-     */
-    private File outputfile
+class CreateDatabaseScriptsTask extends DbDeployTask {
 
-    /**
-     * String representing our DBMS (e.g. mysql, ora)
-     *
-     * @parameter
-     * @required
-     */
-    private String dbms
+    @OutputFile File outputfile
+    @Input String dbms
+    @OutputFile File undoOutputfile
+    @Optional File templateDirectory
 
-    /**
-     * The name of the undo script that dbdeploy will output. Include a full
-     * or relative path.
-     *
-     * @parameter
-     * @required
-     */
-    private File undoOutputfile
+    CreateDatabaseScriptsTask(){
+        super('Create the apply and undo scripts.')
+    }
 
-    /**
-     * Directory for your template scripts, if not using built-in
-     *
-     * @parameter
-     */
-    private File templateDirectory
-
-    @TaskAction
-    def createDatabaseScriptsAction() throws GradleException {
+    @Override
+    void executeAction(){
         DbDeploy dbDeploy = getConfiguredDbDeploy()
-
-        try {
-            dbDeploy.go()
-        } catch (Exception e) {
-            getLogger().error(e)
-            throw new GradleException("dbdeploy change script create failed", e)
-        }
+        dbDeploy.go()
     }
 
     @Override
     protected DbDeploy getConfiguredDbDeploy() {
         DbDeploy dbDeploy = super.getConfiguredDbDeploy()
-        dbDeploy.setOutputfile(outputfile)
-        dbDeploy.setUndoOutputfile(undoOutputfile)
-        dbDeploy.setDbms(dbms)
+        dbDeploy.setOutputfile(getOutputfile())
+        dbDeploy.setUndoOutputfile(getUndoOutputfile())
+        dbDeploy.setDbms(getDbms())
 
         if (templateDirectory != null) {
-            dbDeploy.setTemplatedir(templateDirectory)
+            dbDeploy.setTemplatedir(getTemplateDirectory())
         }
 
         return dbDeploy
