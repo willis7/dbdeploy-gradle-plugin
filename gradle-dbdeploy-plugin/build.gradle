@@ -1,7 +1,6 @@
 apply plugin: 'groovy'
 
 sourceCompatibility = 1.5
-version = '1.0'
 
 dependencies{
     compile gradleApi(), 'com.dbdeploy:dbdeploy-core:3.0M3'
@@ -12,4 +11,12 @@ dependencies{
     testCompile 'junit:junit:4.11'
     testCompile 'cglib:cglib-nodep:2.2'         // For mocking classes
     testCompile 'org.objenesis:objenesis:1.2'   // For mocking final classes
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "file://$rootDir/dbdeploy-dist/src/main/example/repo")
+        }
+    }
 }
