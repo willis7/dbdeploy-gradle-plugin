@@ -1,15 +1,45 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven {
-            url uri('./repo')
-        }
+        maven { url uri('./repo') }
     }
+
     dependencies {
-        classpath group: 'com.dbdeploy',
-                name: 'gradle-dbdeploy-plugin',
-                version: '3.0-SNAPSHOT'
+        classpath group: 'com.dbdeploy', name: 'gradle-dbdeploy-plugin', version: '3.0-SNAPSHOT'
         classpath 'com.dbdeploy:dbdeploy-core:3.0M3'
+        classpath 'hsqldb:hsqldb:1.8.0.7'
     }
 }
+
+repositories {
+    mavenCentral()
+    maven { url uri('./repo') }
+}
+
+configurations {
+    hlsql
+}
+
+dependencies {
+    hlsql 'hsqldb:hsqldb:1.8.0.7'
+}
+
 apply plugin: 'DbDeploy'
+
+dbdeploy {
+    driver="org.hsqldb.jdbcDriver" 
+    url="jdbc:hsqldb:file:db/testdb;shutdown=true"
+    userid="sa"
+    password=""
+}
+
+task deployChangelog << {
+    ant.sql(driver: 'org.hsqldb.jdbcDriver', url: 'jdbc:hsqldb:file:db/testdb;shutdown=true',
+        userid: 'sa', password: '', classpath: configurations.hlsql.asPath,
+        src: '../scripts/createSchemaVersionTable.hsql.sql')   
+}
+
+task dropNCreateDB << {
+    ant.delete(dir: 'db')
+    ant.mkdir(dir: 'db')
+}
