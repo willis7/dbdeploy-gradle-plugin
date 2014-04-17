@@ -2,6 +2,7 @@ package org.gradle.api.plugins.dbdeploy.tasks
 
 import com.dbdeploy.DbDeploy
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
 
@@ -11,10 +12,32 @@ import org.gradle.api.tasks.OutputFile
  */
 class CreateDatabaseScriptsTask extends DbDeployTask {
 
-    @OutputFile File outputfile
-    @Input String dbms
-    @OutputFile File undoOutputfile
-    @Optional File templateDirectory
+    /*
+    * The name of the script that dbdeploy will output. Include a full
+    * or relative path.
+    */
+    @OutputFile
+    File outputfile
+
+    /*
+    * String representing our DBMS (e.g. mysql, ora)
+    */
+    @Input
+    String dbms
+
+    /*
+    * The name of the undo script that dbdeploy will output. Include a full
+    * or relative path.
+    */
+    @OutputFile
+    File undoOutputfile
+
+    /*
+    * Directory for your template scripts, if not using built-in
+    */
+    @InputDirectory
+    @Optional
+    File templateDirectory
 
     CreateDatabaseScriptsTask(){
         super('Create the apply and undo scripts.')

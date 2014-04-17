@@ -3,6 +3,8 @@ package org.gradle.api.plugins.dbdeploy.tasks
 import com.dbdeploy.scripts.ChangeScriptCreator
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.TaskAction
 
 /**
@@ -12,9 +14,11 @@ import org.gradle.api.tasks.TaskAction
 class CreateChangeScriptTask extends DefaultTask{
 
     // Name suffix for the file that will be created (e.g. add_email_to_user_table).
+    @Input
     String name
 
     // Directory where change scripts reside.
+    @InputDirectory
     File scriptdirectory
 
     @TaskAction
@@ -23,9 +27,9 @@ class CreateChangeScriptTask extends DefaultTask{
             final ChangeScriptCreator changeScriptCreator = getConfiguredChangeScriptCreator()
             final File newChangeScript = changeScriptCreator.go()
 
-            getLogger().info("Created new change script:\n\t" + newChangeScript.getAbsolutePath())
+            logger.info("Created new change script:\n\t" + newChangeScript.getAbsolutePath())
         } catch (Exception e) {
-            getLogger().error(e)
+            logger.error(e)
             throw new GradleException("create change script failed", e)
         }
     }
