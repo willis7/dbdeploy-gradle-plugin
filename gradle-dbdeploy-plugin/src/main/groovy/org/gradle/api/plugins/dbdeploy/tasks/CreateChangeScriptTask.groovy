@@ -5,29 +5,37 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 
 /**
  * Gradle task for creating a new timestamped dbdeploy change script.
  * @author Sion Williams
  */
-class CreateChangeScriptTask extends DefaultTask{
-
-    // Name suffix for the file that will be created (e.g. add_email_to_user_table).
+class CreateChangeScriptTask extends DbDeployTask{
+    /**
+     * Name suffix for the file that will be created (e.g. add_email_to_user_table).
+     */
     @Input
-    String name
+    private String name = "new_change_script"
 
-    // Directory where change scripts reside.
+    /**
+     * Directory where change scripts reside.
+     */
     @InputDirectory
-    File scriptdirectory
+    private File scriptdirectory = new File('${project.rootDir}/src/main/sql')
 
-    @TaskAction
-    def action() throws GradleException{
+    CreateChangeScriptTask(){
+        super ('Generate a new timestamped dbdeploy change script')
+    }
+
+    @Override
+    void executeAction() {
         try {
             final ChangeScriptCreator changeScriptCreator = getConfiguredChangeScriptCreator()
             final File newChangeScript = changeScriptCreator.go()
-
             logger.info("Created new change script:\n\t" + newChangeScript.getAbsolutePath())
+
         } catch (Exception e) {
             logger.error(e)
             throw new GradleException("create change script failed", e)
@@ -36,8 +44,8 @@ class CreateChangeScriptTask extends DefaultTask{
 
     private ChangeScriptCreator getConfiguredChangeScriptCreator() {
         final ChangeScriptCreator changeScriptCreator = new ChangeScriptCreator()
-        changeScriptCreator.setScriptDescription(name)
-        changeScriptCreator.setScriptDirectory(scriptdirectory)
+        changeScriptCreator.setScriptDescription(getName())
+        changeScriptCreator.setScriptDirectory(getScriptdirectory())
 
         return changeScriptCreator
     }

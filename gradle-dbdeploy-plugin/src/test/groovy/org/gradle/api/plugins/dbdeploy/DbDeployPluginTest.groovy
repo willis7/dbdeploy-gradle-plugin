@@ -6,7 +6,7 @@ import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
 /**
- * Created by Sion on 13/04/2014.
+ * @author Sion Williams
  */
 class DbDeployPluginTest extends Specification {
     static final DBSCRIPTS_TASK_NAME = 'dbScripts'

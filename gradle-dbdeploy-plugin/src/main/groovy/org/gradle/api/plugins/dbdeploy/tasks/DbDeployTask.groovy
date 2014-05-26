@@ -33,12 +33,14 @@ abstract class DbDeployTask extends DefaultTask{
     * Specifies the jdbc driver.
     */
     @Input
+    @Optional
     String driver
 
     /*
     * Specifies the url of the database that the deltas are to be applied to.
     */
     @Input
+    @Optional
     String url
 
     /*
@@ -46,6 +48,7 @@ abstract class DbDeployTask extends DefaultTask{
     * schema version table.
     */
     @Input
+    @Optional
     String password
 
     /*
@@ -53,6 +56,7 @@ abstract class DbDeployTask extends DefaultTask{
     * version table.
     * */
     @Input
+    @Optional
     String userid
 
     /*
@@ -101,10 +105,17 @@ abstract class DbDeployTask extends DefaultTask{
         group = 'DbDeploy'
     }
 
+    @TaskAction
+    void start() {
+        executeAction()
+    }
+
     protected DbDeploy getConfiguredDbDeploy() {
         DbDeploy dbDeploy = new DbDeploy()
-        /* Properties set by convention mapping need to explicitly
-        *  use getter methods*/
+        /*
+         * Properties set by convention mapping need to explicitly
+         *  use getter methods
+         */
         dbDeploy.setScriptdirectory(getScriptdirectory())
         dbDeploy.setDriver(getDriver())
         dbDeploy.setUrl(getUrl())
@@ -136,22 +147,6 @@ abstract class DbDeployTask extends DefaultTask{
         }
 
         return dbDeploy
-    }
-
-    @TaskAction
-    void start() {
-        withExceptionHandling {
-            executeAction()
-        }
-    }
-
-    public void withExceptionHandling(Closure c){
-        try{
-            c()
-        } catch(Exception e) {
-            logger.error(e)
-            throw new GradleException(e.message)
-        }
     }
 
     abstract void executeAction()
