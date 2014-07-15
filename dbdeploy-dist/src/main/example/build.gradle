@@ -24,7 +24,7 @@ dependencies {
     hlsql 'hsqldb:hsqldb:1.8.0.7'
 }
 
-apply plugin: 'DbDeploy'
+apply plugin: 'dbdeploy'
 
 dbdeploy {
     driver="org.hsqldb.jdbcDriver" 
