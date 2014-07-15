@@ -1,6 +1,7 @@
 package org.gradle.api.plugins.dbdeploy.tasks
 
 import com.dbdeploy.DbDeploy
+import org.gradle.api.GradleException
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.Optional
@@ -10,7 +11,7 @@ import org.gradle.api.tasks.OutputFile
  * Gradle task for creating the apply and undo scripts.
  * @author Sion Williams
  */
-class CreateDatabaseScriptsTask extends DbDeployTask {
+class CreateDatabaseScriptsTask extends AbstractDbDeployTask {
 
     /*
     * The name of the script that dbdeploy will output. Include a full
@@ -46,7 +47,13 @@ class CreateDatabaseScriptsTask extends DbDeployTask {
     @Override
     void executeAction(){
         DbDeploy dbDeploy = getConfiguredDbDeploy()
-        dbDeploy.go()
+
+        try {
+            dbDeploy.go()
+        } catch (Exception e) {
+            logger.error(e)
+            throw new GradleException("dbdeploy change script create failed", e)
+        }
     }
 
     @Override
@@ -56,7 +63,7 @@ class CreateDatabaseScriptsTask extends DbDeployTask {
         dbDeploy.setUndoOutputfile(getUndoOutputfile())
         dbDeploy.setDbms(getDbms())
 
-        if (templateDirectory != null) {
+        if (getTemplateDirectory()) {
             dbDeploy.setTemplatedir(getTemplateDirectory())
         }
 

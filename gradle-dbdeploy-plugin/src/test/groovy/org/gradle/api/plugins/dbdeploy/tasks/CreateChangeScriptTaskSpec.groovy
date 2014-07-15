@@ -7,6 +7,7 @@ import spock.lang.Specification
 
 
 /**
+ * Tests for the Create Change Script Gradle Task
  *
  * @author Sion Williams
  */
@@ -36,18 +37,18 @@ class CreateChangeScriptTaskSpec extends Specification {
 
     void 'Run createChangeScript task'(){
         expect:
-        project.tasks.findByName(TASK_NAME) == null
+            project.tasks.findByName(TASK_NAME) == null
 
         when:
-        project.task(TASK_NAME, type: CreateChangeScriptTask) {
-            scriptdirectory = new File('D:\\src\\dbdeploy-gradle-plugin\\gradle-dbdeploy-plugin\\src\\dist')
-        }
-        Task task = project.tasks.findByName(TASK_NAME)
-        task.start()
+            project.task(TASK_NAME, type: CreateChangeScriptTask) {
+                scriptdirectory = new File('D:\\src\\dbdeploy-gradle-plugin\\gradle-dbdeploy-plugin\\src\\dist')
+            }
+            Task task = project.tasks.findByName(TASK_NAME)
+            task.start()
 
         then:
-        task != null
-        task.description == 'Generate a new timestamped dbdeploy change script'
-        task.group == 'DbDeploy'
+            task != null
+            task.description == 'Generate a new timestamped dbdeploy change script'
+            task.group == 'DbDeploy'
     }
 }

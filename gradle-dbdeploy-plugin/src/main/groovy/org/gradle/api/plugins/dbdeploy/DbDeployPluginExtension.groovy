@@ -15,9 +15,14 @@ class DbDeployPluginExtension {
     String delimiterType
     String lineEnding
     Long lastChangeToApply
+
+    // CreateChangeScript - changeScript
+    String nameSuffix = "new_change_script"
+
+    // CreateDatabaseScripts
     File outputfile
     String dbms
     File undoOutputfile
     File templateDirectory
-    String name = "new_change_script"
+
 }

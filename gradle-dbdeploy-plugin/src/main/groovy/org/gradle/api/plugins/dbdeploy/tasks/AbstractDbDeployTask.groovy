@@ -4,7 +4,6 @@ import com.dbdeploy.DbDeploy
 import com.dbdeploy.database.DelimiterType
 import com.dbdeploy.database.LineEnding
 import org.gradle.api.DefaultTask
-import org.gradle.api.GradleException
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.Optional
@@ -14,13 +13,13 @@ import org.gradle.api.tasks.TaskAction
  * Abstract class that all dbdeploy database tasks should extend.
  * @author Sion Williams
  */
-abstract class DbDeployTask extends DefaultTask{
+abstract class AbstractDbDeployTask extends DefaultTask{
 
     /*
     * Full or relative path to the directory containing the delta scripts.
     */
     @InputDirectory
-    File scriptdirectory
+    File scriptdirectory = new File('src/main/sql')
 
     /*
     * Encoding to use for change scripts and output files.
@@ -100,7 +99,7 @@ abstract class DbDeployTask extends DefaultTask{
     @Optional
     Long lastChangeToApply
 
-    DbDeployTask (String description){
+    AbstractDbDeployTask(String description){
         this.description = description
         group = 'DbDeploy'
     }
@@ -122,27 +121,27 @@ abstract class DbDeployTask extends DefaultTask{
         dbDeploy.setPassword(getPassword())
         dbDeploy.setUserid(getUserid())
 
-        if (encoding != null) {
+        if (encoding) {
             dbDeploy.setEncoding(getEncoding())
         }
 
-        if (lastChangeToApply != null) {
+        if (lastChangeToApply) {
             dbDeploy.setLastChangeToApply(getLastChangeToApply())
         }
 
-        if (changeLogTableName != null) {
+        if (changeLogTableName) {
             dbDeploy.setChangeLogTableName(getChangeLogTableName())
         }
 
-        if (delimiter != null) {
+        if (delimiter) {
             dbDeploy.setDelimiter(getDelimiter())
         }
 
-        if (delimiterType != null) {
+        if (delimiterType) {
             dbDeploy.setDelimiterType(DelimiterType.valueOf(getDelimiterType()))
         }
 
-        if (lineEnding != null) {
+        if (lineEnding) {
             dbDeploy.setLineEnding(LineEnding.valueOf(getLineEnding()))
         }
 

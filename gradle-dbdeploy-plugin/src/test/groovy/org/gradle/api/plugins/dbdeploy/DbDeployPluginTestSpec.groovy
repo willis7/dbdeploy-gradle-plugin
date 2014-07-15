@@ -8,22 +8,37 @@ import spock.lang.Specification
 /**
  * @author Sion Williams
  */
-class DbDeployPluginTest extends Specification {
-    static final DBSCRIPTS_TASK_NAME = 'dbScripts'
-    static final UPDATE_TASK_NAME ='update'
+class DbDeployPluginTestSpec extends Specification {
+
     Project project
 
     void setup() {
         project = ProjectBuilder.builder().build()
     }
 
-    def "Applies plugin and sets extension values"() {
+    def 'Applies plugin and all dbdeploy tasks are added'() {
         expect: 'no dbdeploy tasks in the project initially'
-            project.tasks.findByName(DBSCRIPTS_TASK_NAME) == null
-            project.tasks.findByName(UPDATE_TASK_NAME) == null
+            project.tasks.findByName( DbDeployPlugin.DBSCRIPTS_TASK_NAME ) == null
+            project.tasks.findByName( DbDeployPlugin.UPDATE_TASK_NAME ) == null
+            project.tasks.findByName( DbDeployPlugin.CHANGE_TASK_NAME ) == null
+
+        when: 'I explicitly add the project'
+            project.apply plugin: 'dbdeploy'
+
+        then: 'three dbdeploy tasks should be added'
+            project.extensions.findByName(DbDeployPlugin.EXTENSION_NAME) != null
+            project.tasks.findByName( DbDeployPlugin.DBSCRIPTS_TASK_NAME )
+            project.tasks.findByName( DbDeployPlugin.UPDATE_TASK_NAME )
+            project.tasks.findByName( DbDeployPlugin.CHANGE_TASK_NAME )
+    }
+
+    def 'Applies plugin and sets extension values'() {
+        expect: 'no dbdeploy tasks in the project initially'
+            project.tasks.findByName( DbDeployPlugin.DBSCRIPTS_TASK_NAME ) == null
+            project.tasks.findByName( DbDeployPlugin.UPDATE_TASK_NAME ) == null
 
         when: 'I explicitly add the project and set extension values'
-            project.apply plugin: 'DbDeploy'
+            project.apply plugin: 'dbdeploy'
 
             project.dbdeploy {
                 scriptdirectory = new File('.')
@@ -35,8 +50,7 @@ class DbDeployPluginTest extends Specification {
 
         then: 'dbdeploy tasks and properties should be available'
             project.extensions.findByName(DbDeployPlugin.EXTENSION_NAME) != null
-
-            Task updateTask = project.tasks.findByName(UPDATE_TASK_NAME)
+            Task updateTask = project.tasks.findByName( DbDeployPlugin.UPDATE_TASK_NAME )
             updateTask != null
             updateTask.group == 'DbDeploy'
             updateTask.description == 'Apply dbdeploy change scripts to the database.'
@@ -45,6 +59,5 @@ class DbDeployPluginTest extends Specification {
             updateTask.url == 'jdbc:hsqldb:file:db/testdb;shutdown=true'
             updateTask.password == ''
             updateTask.userid == 'sa'
-
     }
 }

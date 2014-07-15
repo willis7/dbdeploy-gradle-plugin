@@ -1,29 +1,21 @@
 package org.gradle.api.plugins.dbdeploy.tasks
 
 import com.dbdeploy.scripts.ChangeScriptCreator
-import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
-import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.TaskAction
 
 /**
  * Gradle task for creating a new timestamped dbdeploy change script.
  * @author Sion Williams
  */
-class CreateChangeScriptTask extends DbDeployTask{
+class CreateChangeScriptTask extends AbstractDbDeployTask {
     /**
      * Name suffix for the file that will be created (e.g. add_email_to_user_table).
      */
     @Input
-    private String name = "new_change_script"
+    String nameSuffix = "new_change_script"
 
-    /**
-     * Directory where change scripts reside.
-     */
-    @InputDirectory
-    private File scriptdirectory = new File('${project.rootDir}/src/main/sql')
 
     CreateChangeScriptTask(){
         super ('Generate a new timestamped dbdeploy change script')
@@ -44,7 +36,7 @@ class CreateChangeScriptTask extends DbDeployTask{
 
     private ChangeScriptCreator getConfiguredChangeScriptCreator() {
         final ChangeScriptCreator changeScriptCreator = new ChangeScriptCreator()
-        changeScriptCreator.setScriptDescription(getName())
+        changeScriptCreator.setScriptDescription(getNameSuffix())
         changeScriptCreator.setScriptDirectory(getScriptdirectory())
 
         return changeScriptCreator

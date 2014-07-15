@@ -4,7 +4,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.dbdeploy.tasks.CreateChangeScriptTask
 import org.gradle.api.plugins.dbdeploy.tasks.CreateDatabaseScriptsTask
-import org.gradle.api.plugins.dbdeploy.tasks.DbDeployTask
+import org.gradle.api.plugins.dbdeploy.tasks.AbstractDbDeployTask
 import org.gradle.api.plugins.dbdeploy.tasks.UpdateDatabaseTask
 
 /**
@@ -12,21 +12,30 @@ import org.gradle.api.plugins.dbdeploy.tasks.UpdateDatabaseTask
  */
 class DbDeployPlugin implements Plugin<Project>{
     static final EXTENSION_NAME = 'dbdeploy'
+    static final DBSCRIPTS_TASK_NAME = 'dbScripts'
+    static final UPDATE_TASK_NAME ='update'
+    static final CHANGE_TASK_NAME ='changeScript'
 
     @Override
-    void apply(Project project){
-        project.extensions.create(EXTENSION_NAME, DbDeployPluginExtension)
-        addDbDeployCommonConvention(project)
+    void apply( Project project ){
+        project.extensions.create( EXTENSION_NAME, DbDeployPluginExtension )
+        addDbDeployCommonConvention( project )
     }
 
     private void addDbDeployCommonConvention(Project project){
-        /* Adds task after project is evaluated to ensure that
-        *  extension values are set.*/
-        project.tasks.withType(DbDeployTask){
-            /* For all DbDeploy tasks we automatically assign the following*/
-            def extension = project.extensions.findByName(EXTENSION_NAME)
-            /* Assigning the extension property value wrapped in a closure
-            *  to the tasks convention mapping.*/
+        /*
+         * Adds task after project is evaluated to ensure that
+         * extension values are set.
+         */
+        project.tasks.withType( AbstractDbDeployTask ){
+            /*
+             * For all DbDeploy tasks we automatically assign the following
+             */
+            def extension = project.extensions.findByName( EXTENSION_NAME )
+            /*
+             * Assigning the extension property value wrapped in a closure
+             * to the tasks convention mapping.
+             */
             conventionMapping.scriptdirectory = { extension.scriptdirectory }
             conventionMapping.encoding = { extension.encoding }
             conventionMapping.driver = { extension.driver }
@@ -39,17 +48,22 @@ class DbDeployPlugin implements Plugin<Project>{
             conventionMapping.lineEnding = { extension.lineEnding }
             conventionMapping.lastChangeToApply = { extension.lastChangeToApply }
         }
-        addDbDeployTasks(project)
+        addDbDeployTasks( project )
     }
 
-    private void addDbDeployTasks (Project project){
-        project.task('dbScripts', type: CreateDatabaseScriptsTask){
+    private void addDbDeployTasks( Project project ){
+
+        project.task( DBSCRIPTS_TASK_NAME, type: CreateDatabaseScriptsTask){
             conventionMapping.outputfile = { extension.outputfile }
             conventionMapping.dbms = { extension.dbms }
             conventionMapping.undoOutputfile = { extension.undoOutputfile }
             conventionMapping.templateDirectory = { extension.templateDirectory }
         }
-        project.task('update', type: UpdateDatabaseTask)
-        //project.task('changeScript', type: CreateChangeScriptTask)
+
+        project.task( CHANGE_TASK_NAME, type: CreateChangeScriptTask ){
+            conventionMapping.nameSuffix = { extension.nameSuffix }
+        }
+
+        project.task( UPDATE_TASK_NAME, type: UpdateDatabaseTask )
     }
 }
