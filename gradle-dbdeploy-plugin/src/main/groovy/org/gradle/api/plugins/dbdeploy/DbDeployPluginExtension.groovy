@@ -10,7 +10,7 @@ class DbDeployPluginExtension {
     String url
     String password
     String userid
-    String changeLogTableName
+    String changeLogTableName = 'changelog'
     String delimiter
     String delimiterType
     String lineEnding
@@ -19,7 +19,7 @@ class DbDeployPluginExtension {
     // CreateChangeScript - changeScript
     String nameSuffix = "new_change_script"
 
-    // CreateDatabaseScripts
+    // CreateDatabaseScripts - dbScripts
     File outputfile
     String dbms
     File undoOutputfile

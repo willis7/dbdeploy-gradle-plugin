@@ -12,7 +12,7 @@ import spock.lang.Specification
  * @author Sion Williams
  */
 class CreateChangeScriptTaskSpec extends Specification {
-    static final TASK_NAME = 'createChangeScript'
+    static final TASK_NAME = 'changeScript'
     Project project
 
     def setup() {

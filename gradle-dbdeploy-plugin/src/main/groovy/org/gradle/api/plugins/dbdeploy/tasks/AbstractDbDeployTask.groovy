@@ -65,7 +65,7 @@ abstract class AbstractDbDeployTask extends DefaultTask{
     */
     @Input
     @Optional
-    String changeLogTableName
+    String changeLogTableName = 'changelog'
 
     /*
     * Delimiter to use to separate scripts into statements, if dbdeploy will

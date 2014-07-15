@@ -7,6 +7,7 @@ import org.gradle.api.tasks.InputDirectory
 
 /**
  * Gradle task for creating a new timestamped dbdeploy change script.
+ * Task: changeScript
  * @author Sion Williams
  */
 class CreateChangeScriptTask extends AbstractDbDeployTask {

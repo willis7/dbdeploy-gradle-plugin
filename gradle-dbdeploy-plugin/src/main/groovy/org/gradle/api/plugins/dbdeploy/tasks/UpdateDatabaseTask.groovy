@@ -5,6 +5,7 @@ import org.gradle.api.GradleException
 
 /**
  * Apply dbdeploy change scripts directly to the database.
+ * Task: update
  * @author Sion Williams
  */
 public class UpdateDatabaseTask extends AbstractDbDeployTask {
