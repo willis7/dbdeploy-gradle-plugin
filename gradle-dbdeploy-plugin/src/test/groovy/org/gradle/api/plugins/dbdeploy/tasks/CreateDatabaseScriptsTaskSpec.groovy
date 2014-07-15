@@ -5,47 +5,48 @@ import org.gradle.api.Task
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
-
 /**
- * Tests for the Create Change Script Gradle Task
- *
- * @author Sion Williams
+ * Created by Sion on 15/07/2014.
  */
-class CreateChangeScriptTaskSpec extends Specification {
-    static final TASK_NAME = 'changeScript'
+class CreateDatabaseScriptsTaskSpec extends Specification {
+    static final TASK_NAME = 'dbScripts'
     Project project
 
-    def setup() {
+    void setup() {
         project = ProjectBuilder.builder().build()
     }
 
-    void 'Adds createChangeScript task'(){
+    def 'Add a dbScripts task'(){
         expect:
             project.tasks.findByName( TASK_NAME ) == null
 
         when:
-            project.task( TASK_NAME, type: CreateChangeScriptTask ) {
-                scriptdirectory = new File( 'src/dist' )
-                nameSuffix = 'test_'
+            project.task( TASK_NAME, type: CreateDatabaseScriptsTask ) {
+                scriptdirectory = new File('src/dist')
+                outputfile = new File('src/dist/out')
+                dbms = 'mysql'
             }
 
         then:
             Task task = project.tasks.findByName( TASK_NAME )
             task != null
-            task.description == 'Generate a new timestamped dbdeploy change script'
+            task.description == 'Create the apply and undo scripts.'
             task.group == 'DbDeploy'
             task.scriptdirectory == new File( 'src/dist' )
-            task.nameSuffix == 'test_'
+            task.outputfile == new File( 'src/dist/out' )
+            task.dbms == 'mysql'
     }
 
-    /* TODO: Move the Run createChangeScript task to an integration test
-    void 'Run createChangeScript task'(){
+    /* TODO: Move the Run dbScripts task to an integration test
+    void 'Run dbScripts task'(){
         expect:
             project.tasks.findByName( TASK_NAME ) == null
 
         when:
             project.task( TASK_NAME, type: CreateChangeScriptTask ) {
-                scriptdirectory = new File( './gradle-dbdeploy-plugin/src/dist' )
+                scriptdirectory = new File('./gradle-dbdeploy-plugin/src/dist')
+                outputfile = new File('.')
+                dbms = 'mysql'
             }
             Task task = project.tasks.findByName( TASK_NAME )
             task.start()
@@ -54,5 +55,6 @@ class CreateChangeScriptTaskSpec extends Specification {
             task != null
             task.description == 'Generate a new timestamped dbdeploy change script'
             task.group == 'DbDeploy'
-    }*/
+    }
+    */
 }
