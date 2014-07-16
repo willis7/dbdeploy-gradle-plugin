@@ -6,7 +6,9 @@ import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
 /**
- * Created by Sion on 15/07/2014.
+ * Tests for the Create Database Scripts Gradle Task
+ *
+ * @author Sion Williams
  */
 class CreateDatabaseScriptsTaskSpec extends Specification {
     static final TASK_NAME = 'dbScripts'
@@ -52,6 +54,7 @@ class CreateDatabaseScriptsTaskSpec extends Specification {
             task.start()
 
         then:
+            !thrown(GradleException)
             task != null
             task.description == 'Generate a new timestamped dbdeploy change script'
             task.group == 'DbDeploy'

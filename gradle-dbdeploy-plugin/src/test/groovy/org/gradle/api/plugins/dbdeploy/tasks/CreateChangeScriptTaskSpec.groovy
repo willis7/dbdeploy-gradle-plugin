@@ -51,6 +51,7 @@ class CreateChangeScriptTaskSpec extends Specification {
             task.start()
 
         then:
+            !thrown(GradleException)
             task != null
             task.description == 'Generate a new timestamped dbdeploy change script'
             task.group == 'DbDeploy'
