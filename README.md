@@ -8,7 +8,7 @@ dbdeploy is a Database Change Management tool. It’s for developers or DBAs who
 in a simple, controlled, flexible and frequent manner.
 
 ## Build Status
-
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 [![Build Status](https://travis-ci.org/willis7/dbdeploy-gradle-plugin.svg?branch=master)](https://travis-ci.org/willis7/dbdeploy-gradle-plugin)
 
 ## Usage
